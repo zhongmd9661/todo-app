@@ -21,11 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
       checkbox.checked = todo.completed;
-      checkbox.addEventListener('change', () => {
-        todo.completed = checkbox.checked;
-        saveTodos();
-        updateCount();
-      });
+      checkbox.className = 'task-checkbox'; // Add class for event delegation
 
       const span = document.createElement('span');
       span.textContent = todo.text;
@@ -36,12 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const deleteBtn = document.createElement('button');
       deleteBtn.textContent = 'Delete';
       deleteBtn.className = 'delete-btn';
-      deleteBtn.addEventListener('click', () => {
-        todos = todos.filter(t => t.id !== todo.id);
-        saveTodos();
-        renderTodos();
-        updateCount();
-      });
 
       li.appendChild(checkbox);
       li.appendChild(span);
@@ -92,4 +82,35 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initial render and count update
   renderTodos();
   updateCount();
+
+  // Event delegation for checkbox changes on #task-list
+  taskList.addEventListener('change', (e) => {
+    if (!e.target.classList.contains('task-checkbox')) return;
+
+    // Find the corresponding todo by matching text content
+    const span = e.target.closest('.task-item').querySelector('span');
+    const todoText = span.textContent;
+    const todoIndex = todos.findIndex(t => t.text === todoText);
+
+    if (todoIndex !== -1) {
+      // Toggle completed property
+      todos[todoIndex].completed = e.target.checked;
+      saveTodos();
+      renderTodos();
+      updateCount();
+    }
+  });
+
+  // Event delegation for delete button clicks on #task-list
+  taskList.addEventListener('click', (e) => {
+    if (!e.target.classList.contains('delete-btn')) return;
+
+    // Find the corresponding todo by matching text content of span
+    const span = e.target.closest('.task-item').querySelector('span');
+    const todoText = span.textContent;
+    todos = todos.filter(t => t.text !== todoText);
+    saveTodos();
+    renderTodos();
+    updateCount();
+  });
 });
