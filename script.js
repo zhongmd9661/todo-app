@@ -2,9 +2,15 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Get references to elements
   const taskList = document.getElementById('task-list');
-  const addBtn = document.getElementById('add-btn');
-  const newTaskInput = document.getElementById('new-task-input');
-  const countDisplay = document.getElementById('count');
+  const addBtn = document.getElementById('add-button');
+  const newTaskInput = document.getElementById('task-input');
+  const countDisplay = document.createElement('span');
+  countDisplay.id = 'count';
+  countDisplay.className = 'count-display';
+  countDisplay.style.textAlign = 'center';
+  countDisplay.style.marginTop = '10px';
+  countDisplay.style.color = '#4a6fa5';
+  countDisplay.style.fontWeight = 'bold';
 
   // Load todos from localStorage, default to empty array
   let todos = JSON.parse(localStorage.getItem('todos')) || [];
@@ -30,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const deleteBtn = document.createElement('button');
-      deleteBtn.textContent = 'Delete';
+      deleteBtn.textContent = '删除';
       deleteBtn.className = 'delete-btn';
 
       li.appendChild(checkbox);
